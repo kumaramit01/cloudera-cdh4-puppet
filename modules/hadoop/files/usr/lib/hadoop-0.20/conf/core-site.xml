@@ -5,8 +5,8 @@
 
 <configuration>    
     <property>
-      <name>fs.default.name</name>
-      <value>hdfs://33.33.66.1000:9000</value>
+      <name>fs.defaultFS</name>
+      <value>hdfs://master:9000</value>
     </property>
     
 </configuration>
