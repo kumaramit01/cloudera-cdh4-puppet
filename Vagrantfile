@@ -14,10 +14,8 @@ Vagrant::Config.run do |config|
   config.vm.define :master do |master_conf|
     master_conf.vm.host_name = "master"
     master_conf.vm.network :hostonly, "33.33.66.100"
-    master_conf.vm.customize do |vm|
-      vm.memory_size = 2048
-      vm.name = "master"
-    end
+    master_conf.vm.customize ["modifyvm", :id, "--memory", "2048"]
+    master_conf.vm.customize ["modifyvm", :id, "--name", "master"]
   end
 
   (1..3).each do |i|
@@ -25,10 +23,8 @@ Vagrant::Config.run do |config|
     config.vm.define vmname.to_sym do |slave_conf|
       slave_conf.vm.host_name = vmname
       slave_conf.vm.network :hostonly, "33.33.66.#{i+100}"
-      slave_conf.vm.customize do |vm|
-        vm.memory_size = 512
-        vm.name = vmname
-      end
+      slave_conf.vm.customize ["modifyvm", :id, "--memory", "512"]
+      slave_conf.vm.customize ["modifyvm", :id, "--name", vmname]
     end
   end
 end
