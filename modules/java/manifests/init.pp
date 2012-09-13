@@ -1,5 +1,5 @@
 class java {
-  File["/etc/apt/sources.list.d/partner.list"] ~> Exec['get gpg key'] ~> Exec['refresh-apt'] 
+  File["/etc/apt/sources.list.d/oab.list"] ~> Exec['get gpg key'] ~> Exec['refresh-apt'] 
   File["/root/java-accept-lic"] ~> Exec["accept-java-lic"] ~> Exec['refresh-apt'] -> Package["sun-java6-jdk"] 
   
   File { 
@@ -8,12 +8,12 @@ class java {
     mode => 0440,
   }
   
-  file { "/etc/apt/sources.list.d/partner.list":
-    source => "puppet:///modules/java/etc/apt/sources.list.d/partner.list", 
+  file { "/etc/apt/sources.list.d/oab.list":
+    source => "puppet:///modules/java/etc/apt/sources.list.d/oab.list", 
   }
   
   exec { "get gpg key":
-    command => "/usr/bin/apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5",
+    command => "/usr/bin/apt-key add /tmp/vagrant-puppet/modules-0/java/files/deb/pubkey.asc",
     refreshonly => true,
   }    
   
