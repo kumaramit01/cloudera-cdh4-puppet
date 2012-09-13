@@ -7,8 +7,8 @@ Vagrant::Config.run do |config|
   config.vm.provision :shell, :path => "bootstrap.sh"
   config.vm.provision :puppet do |puppet|
     puppet.manifest_file = "site.pp"
-    puppet.manifests_path = "../manifests"
-    puppet.module_path = "../modules"
+    puppet.manifests_path = "manifests"
+    puppet.module_path = "modules"
   end
 
   config.vm.define :master do |master_conf|
@@ -18,7 +18,7 @@ Vagrant::Config.run do |config|
       vm.memory_size = 2048
       vm.name = "master"
     end
-  end 
+  end
 
   (1..3).each do |i|
     vmname = "slave#{i}"
