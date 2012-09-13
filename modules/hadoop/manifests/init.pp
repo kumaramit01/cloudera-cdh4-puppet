@@ -74,9 +74,37 @@ class hadoop::jobtracker {
   package { "hadoop-0.20-mapreduce-jobtracker":
     ensure => "latest",
   }
+  exec { "mapred-system-dir":
+    command => "/usr/bin/hadoop fs -mkdir /mapred/system",
+    user => "hdfs",
+    unless => "/usr/bin/hadoop fs -ls /mapred/system",
+    require => Service["hadoop-hdfs-namenode"],
+  }
+  exec { "mapred-staging-dir":
+    command => "/usr/bin/hadoop fs -mkdir /mapred/staging",
+    user => "hdfs",
+    unless => "/usr/bin/hadoop fs -ls /mapred/system",
+    require => Service["hadoop-hdfs-namenode"],
+  }
+  exec { "mapred-temp-dir":
+    command => "/usr/bin/hadoop fs -mkdir /mapred/temp",
+    user => "hdfs",
+    unless => "/usr/bin/hadoop fs -ls /mapred/system",
+    require => Service["hadoop-hdfs-namenode"],
+  }
+  exec { "mapred-owns-its-dirs":
+    command => "/usr/bin/hadoop fs -chown -R mapred:hadoop /mapred",
+    user => "hdfs",
+    require => [ Exec["mapred-system-dir"],
+                  Exec["mapred-staging-dir"],
+                  Exec["mapred-temp-dir"],
+                ],
+  }
   service { "hadoop-0.20-mapreduce-jobtracker":
     ensure => "running",
-    require => Package["hadoop-0.20-mapreduce-jobtracker"],
+    require => [ Package["hadoop-0.20-mapreduce-jobtracker"],
+                 Exec["mapred-owns-its-dirs"],
+               ],
   }
 }
 
