@@ -115,6 +115,11 @@ class hadoop::base {
     group => root,
     mode  => 755,
   }
+  file { "/etc/hosts":
+    source => "puppet:///modules/hadoop/etc/hosts",
+    ensure => "file",
+    mode => "0744",
+  }
   file { "/etc/hadoop/conf.cluster/":
     ensure  => directory,
     source  => 'puppet:///modules/hadoop/etc/hadoop/conf.cluster/',
