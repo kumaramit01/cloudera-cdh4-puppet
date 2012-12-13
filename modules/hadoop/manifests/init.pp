@@ -4,7 +4,7 @@ class hadoop::datanode {
   package { "hadoop-hdfs-datanode":
     ensure => "latest",
   }
-  file { ["/data0/hdfs", "/data0/hdfs/data"]:
+  file { ["/data/hdfs", "/data/hdfs/data"]:
     ensure => directory,
     owner => hdfs,
     group => hadoop,
@@ -13,7 +13,7 @@ class hadoop::datanode {
   service { "hadoop-hdfs-datanode":
     ensure => "running",
     require => [ Package["hadoop-hdfs-datanode"],
-                 File["/data0/hdfs/data"],
+                 File["/data/hdfs/data"],
                ],
   }
 }
@@ -23,7 +23,7 @@ class hadoop::tasktracker {
   package { "hadoop-0.20-mapreduce-tasktracker":
     ensure => "latest",
   }
-  file { ["/data0/mapred", "/data0/mapred/local"]:
+  file { ["/data/mapred", "/data/mapred/local"]:
     ensure => directory,
     owner => mapred,
     group => hadoop,
@@ -32,7 +32,7 @@ class hadoop::tasktracker {
   service { "hadoop-0.20-mapreduce-tasktracker":
     ensure => "running",
     require => [ Package["hadoop-0.20-mapreduce-tasktracker"],
-                 File["/data0/mapred/local"],
+                 File["/data/mapred/local"],
                ],
   }
 }
@@ -74,7 +74,7 @@ class hadoop::jobtracker {
   package { "hadoop-0.20-mapreduce-jobtracker":
     ensure => "latest",
   }
-  file { ["/data0/mapred", "/data0/mapred/local"]:
+  file { ["/data/mapred", "/data/mapred/local"]:
     ensure => directory,
     owner => mapred,
     group => hadoop,
@@ -110,7 +110,7 @@ class hadoop::jobtracker {
     ensure => "running",
     require => [ Package["hadoop-0.20-mapreduce-jobtracker"],
                  Exec["mapred-owns-its-dirs"],
-                 File["/data0/mapred/local"],
+                 File["/data/mapred/local"],
                ],
   }
 }
@@ -124,11 +124,6 @@ class hadoop::base {
     owner => root,
     group => root,
     mode  => 755,
-  }
-  file { "/etc/hosts":
-    source => "puppet:///modules/hadoop/etc/hosts",
-    ensure => "file",
-    mode => "0744",
   }
   file { "/etc/hadoop/conf.cluster/":
     ensure  => directory,
@@ -156,7 +151,7 @@ class hadoop::base {
 }
 
 class hadoop::package {
-  require hadoop::apt,java
+  require hadoop::apt
   package { "hadoop":
     ensure => "latest",
   }
